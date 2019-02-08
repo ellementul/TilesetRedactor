@@ -6,11 +6,18 @@
 	<body class="window panel-stroke">
 		<div class="panel-column">
 			<div class="panel-stroke">
-				<button class="button">ДОБАВИТЬ</button>
+				<button id="save" class="button">СОХРАНИТЬ</button>
+				<p class="button">
+				ОТКРЫТЬ: 
+				<input id="open" type="file">
+				</p>
+			</div>
+			<div class="panel-stroke">
+				<button id="switch_add" class="button">ДОБАВИТЬ</button>
 				<button id="dell" class="button">УДАЛИТЬ</button>
 			</div>
 			
-			<form id="add">
+			<form id="add" class="invis">
 				<h3>Тип</h3>
 				<select name="type">
 					<option value="svg">SVG</option>

@@ -1,9 +1,14 @@
 function CrEvnets(List){
 	var Clicks = List.clicks;
 	var Submits = List.submits;
+	var Changes = List.changes;
 	
 	for(var id in Clicks){;
 		getNode(id).onclick = Clicks[id];
+	}
+	
+	for(var id in Changes){;
+		getNode(id).onchange = Changes[id];
 	}
 	
 	for(id in Submits){;

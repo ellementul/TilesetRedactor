@@ -1,5 +1,6 @@
 require("typesjs");
 const RGB = require('chromath').rgb;
+var FileSaver = require('file-saver');
 
 var id_tiles_list = "Tiles";
 var id_view = "View";
@@ -34,10 +35,19 @@ function CrTiles(id){
 		current_tile.remove();
 		current_tile = null;
 	}
+
+	this.clear = function(){
+		container.innerHTML = "";
+		current_tile = null;
+	}
 }
 
-module.exports = {Tiles: new CrTiles(id_tiles_list)}
+module.exports = {Tiles: new CrTiles(id_tiles_list), save: Save}
 
+function Save(name, text){
+	var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+	FileSaver.saveAs(blob, name);
+}
 
 function drawTile(new_tile){
 	var Tile = document.createElement('div');

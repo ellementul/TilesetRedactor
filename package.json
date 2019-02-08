@@ -15,7 +15,10 @@
   "author": "ellementul",
   "license": "ISC",
   "dependencies": {
+    "browserify": "^16.2.3",
     "chromath": "0.0.7",
-    "electron": "^4.0.4"
+    "electron": "^4.0.4",
+    "file-saver": "^2.0.0",
+    "typesjs": "1.2.0"
   }
 }

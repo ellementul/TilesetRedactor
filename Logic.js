@@ -1,12 +1,10 @@
 var Types = require("./Types.js");
 
-function CrLogic(Tiles, Draw){
+
+function CrLogic(Draw){
 	var tiles = [];
 	var current_tile = null;
 	var tiles_count = 0;
-	
-	Tiles.forEach(Add);
-	current_tile = 0;
 	
 	this.setTile = function(val){
 		var finded_tile = getTile(val);
@@ -33,6 +31,21 @@ function CrLogic(Tiles, Draw){
 			}
 		}
 	}
+	this.save = function(){
+		var data = tiles.map(function(tile, i){
+			tile = Object.assign({}, tile);
+			tile.id = i; 
+			return tile; 
+		});
+		data = {tiles: data, width: 1, height: 1}
+		Draw.save("tileset.json", JSON.stringify(data, null, 1));
+	}
+	
+	this.load = function(new_tiles, is_save=true){
+		if(is_save) this.save();
+		Clear();
+		new_tiles.tiles.forEach(Add);
+	}
 	
 	function getTile(id){
 		return tiles.filter(tile => id == tile.id)[0];
@@ -46,6 +59,12 @@ function CrLogic(Tiles, Draw){
 		else tiles.splice(getTile(current_tile), 0, tile);
 		
 		Draw.Tiles.add(tile);
+	}
+	
+	function Clear(){
+		Draw.Tiles.clear();
+		tiles = [];
+		current_tile = null;
 	}
 }
 
