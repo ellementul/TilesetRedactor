@@ -1,0 +1,49 @@
+.window{
+	margin: 0;
+	
+	background-color: #78a;
+}
+
+.panel-stroke{
+	display: flex;
+}
+
+.panel-column{
+	display: flex;
+	flex-direction: column;
+}
+
+.panel-wrap{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.button{
+	width: 25vh;
+	
+	margin-top: 2vh;
+	
+	line-height: 100%;
+	
+	background-color: white;
+}
+
+.tile{
+	margin: 1vh;
+	
+	background-size: 100% 100%;
+	background-repeat: no-repeat;  
+	
+	width: 10vh;
+	height: 10vh;
+}
+
+.changed{
+	border: 1vh solid red;
+}
+
+.invis{
+	display: none
+}
+
+

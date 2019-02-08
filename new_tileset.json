@@ -1,0 +1,19 @@
+{
+	"tileset": {
+		"name": "New",
+		"version": "1.0.0",
+		"orientation": "orthogonal",
+		"width": 1,
+		"height": 1,
+		"tiles": [
+			{
+				"type": "color",
+				"color": "#000000"
+			},
+			{
+				"type": "color",
+				"color": "#FFFFFF"
+			}
+		]
+	}
+}
