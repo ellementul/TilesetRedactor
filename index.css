@@ -1,5 +1,5 @@
 .window{
-	margin: 0;
+	margin: 5vh;
 	
 	background-color: #78a;
 }
@@ -18,10 +18,20 @@
 	flex-wrap: wrap;
 }
 
+.view{
+	position: relative;
+
+	margin-top: 0;
+	margin-bottom: 0;
+	
+	width: 90vh;
+	height: 90vh;
+	
+	background: white;
+}
+
 .button{
 	width: 25vh;
-	
-	margin-top: 2vh;
 	
 	line-height: 100%;
 	
@@ -37,6 +47,18 @@
 	width: 10vh;
 	height: 10vh;
 }
+
+.view .tile{
+	position: absolute;
+	
+	left: 0;
+	top: 0;
+	
+	margin: 0;
+	
+	background-color: black;
+}
+
 
 .changed{
 	border: 1vh solid red;

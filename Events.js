@@ -1,19 +1,15 @@
-function CrEvnets(List){
-	var Clicks = List.clicks;
-	var Submits = List.submits;
-	var Changes = List.changes;
+
+function IdEvent(id, name_event, func){
 	
-	for(var id in Clicks){;
-		getNode(id).onclick = Clicks[id];
+	if(name_event == "submit"){
+		var old_func = func;
+		func = function(e){
+			e.preventDefault();
+			old_func.apply(this, arguments);
+		} 
 	}
 	
-	for(var id in Changes){;
-		getNode(id).onchange = Changes[id];
-	}
-	
-	for(id in Submits){;
-		getNode(id).onsubmit = Submit(Submits[id]);
-	}
+	getNode(id).addEventListener(name_event, func);
 }
 
 function Submit(func){
@@ -29,4 +25,4 @@ function getNode(id){
 	return elem;
 }
 
-module.exports = CrEvnets;
+module.exports = IdEvent;

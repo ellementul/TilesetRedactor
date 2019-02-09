@@ -42,17 +42,65 @@ function CrTiles(id){
 	}
 }
 
-module.exports = {Tiles: new CrTiles(id_tiles_list), save: Save}
+function CrView(id){
+	var container = getNode(id);
+	var size = 20;
+	this.current_tile = null;
+	
+	this.move = function(x, y){
+		if(this.current_tile){
+			var tile = getComputedStyle(this.current_tile);
+			
+			this.current_tile.style.left = NormCoord(x, parseFloat(tile.width)) + "px";
+			this.current_tile.style.top = NormCoord(y, parseFloat(tile.height)) + "px";
+		}
+	}
+	
+	function NormCoord(c, s){
+		var con_size = parseFloat(getComputedStyle(container).width);
+		
+		if(c + s > con_size) c = con_size - s;
+		if(c < 0) c = 0;
+		
+		return Math.floor((c / con_size) * size) * (con_size / size);
+	}
+	
+}
+
+module.exports = {
+	Tiles: new CrTiles(id_tiles_list),
+	View: new CrView(id_view),
+	save: Save,
+	openJSON: OpenFileJSON,
+	switchElem: CrSwitch
+}
+
+function OpenFileJSON(Open){
+	return function(){
+		var reader = new FileReader();
+		reader.onload = function(e){Open(JSON.parse(e.target.result))};
+		reader.readAsText(this.files[0]);
+	}
+}
 
 function Save(name, text){
 	var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
 	FileSaver.saveAs(blob, name);
 }
 
+function CrSwitch(id, name_class){
+	var elem = getNode(id).classList;
+	return function(){
+		elem.toggle(name_class);
+	}
+}
+
+
 function drawTile(new_tile){
 	var Tile = document.createElement('div');
 	Tile.classList.add("tile");
 	Tile.setAttribute("tile", new_tile.id);
+	Tile.setAttribute("draggable", true);
 	if(new_tile.type == "color") Tile.style.backgroundColor = new RGB(new_tile.color).toString();
 	if(new_tile.type == "svg") Tile.style.backgroundImage = "url(" + new_tile.img + ")";
 	

@@ -5,7 +5,7 @@ var T = Object.types;
 
 var type_tile = T.obj({
 		type: "color",
-		color: {r: T.pos(255), b: T.pos(255), g: T.pos(255)}
+		color: {r: T.pos(256), b: T.pos(256), g: T.pos(256)}
 	});
 var type_tile_svg = T.obj({
 		type: "svg",

@@ -45,6 +45,7 @@ function CrLogic(Draw){
 		if(is_save) this.save();
 		Clear();
 		new_tiles.tiles.forEach(Add);
+		this.setTile(0);
 	}
 	
 	function getTile(id){
@@ -65,6 +66,7 @@ function CrLogic(Draw){
 		Draw.Tiles.clear();
 		tiles = [];
 		current_tile = null;
+		tiles_count = 0;
 	}
 }
 
