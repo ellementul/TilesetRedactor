@@ -9,7 +9,10 @@ function IdEvent(id, name_event, func){
 		} 
 	}
 	
-	getNode(id).addEventListener(name_event, func);
+	if(Array.isArray(name_event)){
+		name_event.forEach(name => getNode(id).addEventListener(name, func));
+	}
+	else getNode(id).addEventListener(name_event, func);
 }
 
 function Submit(func){

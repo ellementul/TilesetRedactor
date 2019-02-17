@@ -5,7 +5,6 @@
 	</head>
 	<body class="window panel-stroke">
 		<div id="View" class="window view">
-				<div class="tile" draggable="true" tile="1"></div>
 		</div>
 		<div class="panel-column">
 			<div class="panel-stroke">
@@ -29,6 +28,11 @@
 				<input name="img" type="file" accept="image">
 				<button class="submit">OK</button>
 			</form>
+			
+			<div class="panel-column">
+				<p>ШИРИНА ТАЙЛА<input id="Width" type="number" min="1" max="20"></input>
+				<p>ВЫСОТА ТАЙЛА<input id="Height" type="number" min="1" max="20"></input>
+			</div>
 			
 			<div id="Tiles" class="panel-wrap"></div>
 		</div>

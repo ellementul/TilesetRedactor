@@ -13,23 +13,30 @@ function CrTiles(id){
 		function(){
 			return current_tile.tile;
 		}, 
-		function(val){
+		function(new_tile){
 			
-			var tile = container.querySelector('[tile="' + val + '"]');
+			var tile = container.querySelector('[tile="' + new_tile.id + '"]');
 			if(!tile) throw new Error("Tile is not find!");
 			
 			if(current_tile) current_tile.classList.remove("changed");
 			tile.classList.add("changed");
 			current_tile = tile;
+			
+			if(new_tile.width) getNode("Width").value = new_tile.width; 
+			else getNode("Width").value = null;
+			
+			if(new_tile.height) getNode("Height").value = new_tile.height;
+			else getNode("Height").value = null;
 		}
 	);
 	
 	this.add = function(new_tile){
-		new_tile = drawTile(new_tile);
+		var Tile = drawTile(new_tile);
 		
-		if(current_tile) current_tile.insertAdjacentElement("beforeBegin", new_tile);
-		else container.appendChild(new_tile);
+		if(current_tile) current_tile.insertAdjacentElement("beforeBegin", Tile);
+		else container.appendChild(Tile);
 	}
+	
 	this.dell = function(){
 		current_tile.classList.remove("changed");
 		current_tile.remove();
@@ -47,22 +54,84 @@ function CrView(id){
 	var size = 20;
 	this.current_tile = null;
 	
+	drawGrid(container, size);
+	
+	this.add = function(new_tile, x, y){
+		tile = drawTile(new_tile);
+		tile.style.width = (new_tile.width * (100 / size)) + "%";
+		tile.style.height = (new_tile.height * (100 / size)) + "%";
+		
+		tile.style.left = x  + "px";
+		tile.style.top = y + "px";
+		
+		container.appendChild(tile);
+		NormTile(tile);
+	}
+	
+	this.dell = function(id_tile){
+		var tiles = container.querySelectorAll('[tile="' + id_tile + '"]');
+		tiles.forEach(tile => tile.remove());
+	}
+	this.clear = function(){
+		var tiles = container.querySelectorAll('[tile]');
+		tiles.forEach(tile => tile.remove());
+	}
+	
+	this.resize = function(tile){
+		var elems = container.querySelectorAll('[tile="' + tile.id + '"]');
+		elems.forEach(function(elem){
+			elem.style.width = (tile.width * (100 / size)) + "%";
+			elem.style.height = (tile.height * (100 / size)) + "%";
+		});
+	}
+	
 	this.move = function(x, y){
 		if(this.current_tile){
 			var tile = getComputedStyle(this.current_tile);
 			
-			this.current_tile.style.left = NormCoord(x, parseFloat(tile.width)) + "px";
-			this.current_tile.style.top = NormCoord(y, parseFloat(tile.height)) + "px";
+			this.current_tile.style.left = (parseFloat(tile.left) + x) + "px";
+			this.current_tile.style.top = (parseFloat(tile.top) + y) + "px";
 		}
 	}
 	
-	function NormCoord(c, s){
+	this.norm = function(){
+		if(this.current_tile) NormTile(this.current_tile);
+	}
+	
+	function NormTile(tile){
+		var box = getComputedStyle(tile);
+		tile.style.left = NormCoord(parseFloat(box.left), parseFloat(box.width)) + "%";
+		tile.style.top = NormCoord(parseFloat(box.top), parseFloat(box.height)) + "%";
+	}
+	
+	function NormCoord(coord, s){
 		var con_size = parseFloat(getComputedStyle(container).width);
 		
-		if(c + s > con_size) c = con_size - s;
-		if(c < 0) c = 0;
+		if(coord + s > con_size) coord = con_size - s;
+		if(coord < 0) coord = 0;
 		
-		return Math.floor((c / con_size) * size) * (con_size / size);
+		return Math.round((coord / con_size) * size) * (100 / size);
+	}
+	
+	function drawGrid(container, grid_size){
+		var size = 100 / grid_size;
+		for(var i = grid_size - 1; i >= 0; i--){
+			for(var j = grid_size - 1; j >= 0; j--){
+				container.appendChild(darwBox(i*size, j*size, size));
+			}
+		}
+	}
+	
+	function darwBox(x, y, size){
+		var box = document.createElement('div');
+		box.classList.add("box");
+		box.style.width = size + "%";
+		box.style.height = size + "%";
+		
+		box.style.left = x + "%";
+		box.style.top = y + "%";
+		
+		return box;
 	}
 	
 }
@@ -77,9 +146,11 @@ module.exports = {
 
 function OpenFileJSON(Open){
 	return function(){
-		var reader = new FileReader();
-		reader.onload = function(e){Open(JSON.parse(e.target.result))};
-		reader.readAsText(this.files[0]);
+		if(this.files[0]){
+			var reader = new FileReader();
+			reader.onload = function(e){Open(JSON.parse(e.target.result))};
+			reader.readAsText(this.files[0]);
+		}
 	}
 }
 
@@ -97,14 +168,23 @@ function CrSwitch(id, name_class){
 
 
 function drawTile(new_tile){
-	var Tile = document.createElement('div');
-	Tile.classList.add("tile");
-	Tile.setAttribute("tile", new_tile.id);
-	Tile.setAttribute("draggable", true);
-	if(new_tile.type == "color") Tile.style.backgroundColor = new RGB(new_tile.color).toString();
-	if(new_tile.type == "svg") Tile.style.backgroundImage = "url(" + new_tile.img + ")";
 	
-	return Tile;
+	if(new_tile.type == "color"){
+		var Tile = document.createElement('div');
+		Tile.classList.add("tile");
+		Tile.setAttribute("tile", new_tile.id);
+		Tile.setAttribute("draggable", true);
+		Tile.style.backgroundColor = new RGB(new_tile.color).toString();
+		return Tile;
+	}
+	if(new_tile.type == "svg"){
+		var img = document.createElement('img');
+		img.classList.add("tile");
+		img.setAttribute("tile", new_tile.id);
+		img.setAttribute("draggable", true);
+		img.src = new_tile.img;
+		return img;
+	}
 }
 
 function getNode(id){
