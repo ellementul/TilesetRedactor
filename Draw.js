@@ -57,7 +57,7 @@ function CrView(id){
 	drawGrid(container, size);
 	
 	this.add = function(new_tile, x, y){
-		tile = drawTile(new_tile);
+		var tile = drawTile(new_tile);
 		tile.style.width = (new_tile.width * (100 / size)) + "%";
 		tile.style.height = (new_tile.height * (100 / size)) + "%";
 		
