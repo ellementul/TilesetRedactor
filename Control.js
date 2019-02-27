@@ -1,4 +1,5 @@
 const Hear = require("./Events.js");
+const Chromath = require('chromath');
 
 function CrController(Logic, Draw){
 	
@@ -11,21 +12,30 @@ function CrController(Logic, Draw){
 		event.dataTransfer.effectAllowed = 'move';
 	});
 	
+	var switchTypeTile = Draw.switchElem(["type_svg", "type_color"], "invis");
+	switchTypeTile("type_" + getNode("type").value);
+	Hear("type", "change", function(e){
+		switchTypeTile("type_" + e.target.value);
+	});
 	Hear("add", "submit", function(){
 		var tile = {
 			type: this.type.value
 		};
-		
-		if(this.img.files[0]){
-			var reader = new FileReader();
-			reader.onload = function(e){
-				var img = e.target.result;
-				tile.img = img;
-				Logic.add(tile);
-			};
-			
-			reader.readAsDataURL(this.img.files[0]);
-			this.reset();
+		if(tile.type == "svg"){
+			if(this.img.files[0]){
+				var reader = new FileReader();
+				reader.onload = function(e){
+					var img = e.target.result;
+					tile.img = img;
+					Logic.add(tile);
+				};
+				
+				reader.readAsDataURL(this.img.files[0]);
+			}
+		}
+		if(tile.type == "color"){
+			tile.color = new Chromath(this.color.value).toRGBAObject();
+			Logic.add(tile);
 		}
 		
 	});
@@ -74,3 +84,9 @@ function CrController(Logic, Draw){
 }
 
 module.exports = CrController;
+
+function getNode(id){
+	var elem = document.getElementById(id);
+	if(!elem) throw new Error("Elem is not find!");
+	return elem;
+}

@@ -1,5 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const Hear = require("./Events.js");
+const Chromath = require('chromath');
 
 function CrController(Logic, Draw){
 	
@@ -12,21 +13,30 @@ function CrController(Logic, Draw){
 		event.dataTransfer.effectAllowed = 'move';
 	});
 	
+	var switchTypeTile = Draw.switchElem(["type_svg", "type_color"], "invis");
+	switchTypeTile("type_" + getNode("type").value);
+	Hear("type", "change", function(e){
+		switchTypeTile("type_" + e.target.value);
+	});
 	Hear("add", "submit", function(){
 		var tile = {
 			type: this.type.value
 		};
-		
-		if(this.img.files[0]){
-			var reader = new FileReader();
-			reader.onload = function(e){
-				var img = e.target.result;
-				tile.img = img;
-				Logic.add(tile);
-			};
-			
-			reader.readAsDataURL(this.img.files[0]);
-			this.reset();
+		if(tile.type == "svg"){
+			if(this.img.files[0]){
+				var reader = new FileReader();
+				reader.onload = function(e){
+					var img = e.target.result;
+					tile.img = img;
+					Logic.add(tile);
+				};
+				
+				reader.readAsDataURL(this.img.files[0]);
+			}
+		}
+		if(tile.type == "color"){
+			tile.color = new Chromath(this.color.value).toRGBAObject();
+			Logic.add(tile);
 		}
 		
 	});
@@ -76,7 +86,12 @@ function CrController(Logic, Draw){
 
 module.exports = CrController;
 
-},{"./Events.js":3}],2:[function(require,module,exports){
+function getNode(id){
+	var elem = document.getElementById(id);
+	if(!elem) throw new Error("Elem is not find!");
+	return elem;
+}
+},{"./Events.js":3,"chromath":8}],2:[function(require,module,exports){
 require("typesjs");
 const RGB = require('chromath').rgb;
 var FileSaver = require('file-saver');
@@ -239,10 +254,26 @@ function Save(name, text){
 }
 
 function CrSwitch(id, name_class){
-	var elem = getNode(id).classList;
-	return function(){
-		elem.toggle(name_class);
+	if(Array.isArray(id)){
+		var elems = id.map(getNode);
+		elems = elems.map(elem => elem.classList);
+
+		return function(id){
+			var cur_elem = getNode(id).classList;
+			console.log(id, cur_elem);
+			elems.forEach(function(elem){
+				elem.add(name_class);
+			});
+			cur_elem.remove(name_class);
+		}
 	}
+	else{
+		var elem = getNode(id).classList;
+		return function(){
+			elem.toggle(name_class);
+		}
+	}
+	
 }
 
 
@@ -422,7 +453,7 @@ var T = Object.types;
 
 var type_tile = T.obj({
 		type: "color",
-		color: {r: T.pos(256), b: T.pos(256), g: T.pos(256)}
+		color: {r: T.pos(256), b: T.pos(256), g: T.pos(256), a: T.any(undefined, T.num)}
 	});
 var type_tile_svg = T.obj({
 		type: "svg",

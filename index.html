@@ -21,11 +21,20 @@
 			
 			<form id="add" class="invis">
 				<h3>Тип</h3>
-				<select name="type">
-					<option value="svg">SVG</option>
+				<select id="type" name="type">
+					<option selected value="svg">SVG</option>
+					<option value="color">Цвет</option>
 				</select>
-				<h3>Цвет</h3>
-				<input name="img" type="file" accept="image">
+
+				<div id="type_color" class="invis">
+					<h3>Цвет</h3>
+					<input name="color" type="color">
+				</div>
+				<div id="type_svg"  class="invis">
+					<h3>Картинка</h3>
+					<input name="img" type="file" accept="image">
+				</div>
+
 				<button class="submit">OK</button>
 			</form>
 			
