@@ -186,21 +186,19 @@ function CrSwitch(id, name_class){
 function drawTile(new_tile){
 	
 	if(new_tile.type == "color"){
-		var Tile = document.createElement('div');
-		Tile.classList.add("tile");
-		Tile.setAttribute("tile", new_tile.id);
-		Tile.setAttribute("draggable", true);
-		Tile.style.backgroundColor = new RGB(new_tile.color).toString();
-		return Tile;
+		var img = document.createElement('img');
+		img.style.backgroundColor = new RGB(new_tile.color).toString();
 	}
 	if(new_tile.type == "svg" || new_tile.type == "phisic"){
 		var img = document.createElement('img');
-		img.classList.add("tile");
-		img.setAttribute("tile", new_tile.id);
-		img.setAttribute("draggable", true);
 		img.src = new_tile.img;
-		return img;
 	}
+
+	img.classList.add("tile");
+	img.setAttribute("tile", new_tile.id);
+	img.setAttribute("draggable", true);
+	
+	return img;
 }
 
 function getNode(id){
