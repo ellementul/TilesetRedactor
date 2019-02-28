@@ -12,7 +12,7 @@ function CrController(Logic, Draw){
 		event.dataTransfer.effectAllowed = 'move';
 	});
 	
-	var switchTypeTile = Draw.switchElem(["type_svg", "type_color"], "invis");
+	var switchTypeTile = Draw.switchElem(["type_svg", "type_color", "type_phisic"], "invis");
 	switchTypeTile("type_" + getNode("type").value);
 	Hear("type", "change", function(e){
 		switchTypeTile("type_" + e.target.value);
@@ -31,6 +31,19 @@ function CrController(Logic, Draw){
 				};
 				
 				reader.readAsDataURL(this.img.files[0]);
+			}
+		}
+		if(tile.type == "phisic"){
+			tile.durability = this.durability.value;
+			if(this.imgs.files[0]){
+				var reader = new FileReader();
+				reader.onload = function(e){
+					var img = e.target.result;
+					tile.img = img;
+					Logic.add(tile);
+				};
+				
+				reader.readAsDataURL(this.imgs.files[0]);
 			}
 		}
 		if(tile.type == "color"){

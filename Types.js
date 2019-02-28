@@ -11,7 +11,11 @@ var type_tile_svg = T.obj({
 		type: "svg",
 		img: T.str(/^[\w\d+:;,=/]*$/, 1024*1024)
 });
+var type_tile_phisic = T.obj({
+		type: "phisic",
+		img: T.str(/^[\w\d+:;,=/]*$/, 1024*1024),
+		durability: "wood"
+});
 module.exports = {
-	tile: T.any(type_tile_svg, type_tile), 
-	tiles: T.arr(type_tile, 15)
+	tile: T.any(type_tile_svg, type_tile, type_tile_phisic)
 };

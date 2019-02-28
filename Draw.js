@@ -193,7 +193,7 @@ function drawTile(new_tile){
 		Tile.style.backgroundColor = new RGB(new_tile.color).toString();
 		return Tile;
 	}
-	if(new_tile.type == "svg"){
+	if(new_tile.type == "svg" || new_tile.type == "phisic"){
 		var img = document.createElement('img');
 		img.classList.add("tile");
 		img.setAttribute("tile", new_tile.id);

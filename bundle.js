@@ -13,7 +13,7 @@ function CrController(Logic, Draw){
 		event.dataTransfer.effectAllowed = 'move';
 	});
 	
-	var switchTypeTile = Draw.switchElem(["type_svg", "type_color"], "invis");
+	var switchTypeTile = Draw.switchElem(["type_svg", "type_color", "type_phisic"], "invis");
 	switchTypeTile("type_" + getNode("type").value);
 	Hear("type", "change", function(e){
 		switchTypeTile("type_" + e.target.value);
@@ -32,6 +32,19 @@ function CrController(Logic, Draw){
 				};
 				
 				reader.readAsDataURL(this.img.files[0]);
+			}
+		}
+		if(tile.type == "phisic"){
+			tile.durability = this.durability.value;
+			if(this.imgs.files[0]){
+				var reader = new FileReader();
+				reader.onload = function(e){
+					var img = e.target.result;
+					tile.img = img;
+					Logic.add(tile);
+				};
+				
+				reader.readAsDataURL(this.imgs.files[0]);
 			}
 		}
 		if(tile.type == "color"){
@@ -287,7 +300,7 @@ function drawTile(new_tile){
 		Tile.style.backgroundColor = new RGB(new_tile.color).toString();
 		return Tile;
 	}
-	if(new_tile.type == "svg"){
+	if(new_tile.type == "svg" || new_tile.type == "phisic"){
 		var img = document.createElement('img');
 		img.classList.add("tile");
 		img.setAttribute("tile", new_tile.id);
@@ -459,9 +472,13 @@ var type_tile_svg = T.obj({
 		type: "svg",
 		img: T.str(/^[\w\d+:;,=/]*$/, 1024*1024)
 });
+var type_tile_phisic = T.obj({
+		type: "phisic",
+		img: T.str(/^[\w\d+:;,=/]*$/, 1024*1024),
+		durability: "wood"
+});
 module.exports = {
-	tile: T.any(type_tile_svg, type_tile), 
-	tiles: T.arr(type_tile, 15)
+	tile: T.any(type_tile_svg, type_tile, type_tile_phisic)
 };
 
 },{"typesjs":18,"typesjs/str_type":17}],6:[function(require,module,exports){
