@@ -141,7 +141,7 @@ module.exports = {
 	View: new CrView(id_view),
 	save: Save,
 	openJSON: OpenFileJSON,
-	switchElem: CrSwitch
+	switchElem: require("./Switch.js")
 }
 
 function OpenFileJSON(Open){
@@ -157,29 +157,6 @@ function OpenFileJSON(Open){
 function Save(name, text){
 	var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
 	FileSaver.saveAs(blob, name);
-}
-
-function CrSwitch(id, name_class){
-	if(Array.isArray(id)){
-		var elems = id.map(getNode);
-		elems = elems.map(elem => elem.classList);
-
-		return function(id){
-			var cur_elem = getNode(id).classList;
-			console.log(id, cur_elem);
-			elems.forEach(function(elem){
-				elem.add(name_class);
-			});
-			cur_elem.remove(name_class);
-		}
-	}
-	else{
-		var elem = getNode(id).classList;
-		return function(){
-			elem.toggle(name_class);
-		}
-	}
-	
 }
 
 

@@ -3,7 +3,7 @@ const Chromath = require('chromath');
 
 function CrController(Logic, Draw){
 	
-	Hear("switch_add", "click", Draw.switchElem("add", "invis"));
+	Hear("switch_add", "click", Draw.switchElem("invis", "add"));
 
 	Hear("Tiles", "mousedown", function(event){
 		if(event.target.getAttribute("tile") !== null) Logic.setTile(event.target.getAttribute("tile"));
@@ -12,11 +12,16 @@ function CrController(Logic, Draw){
 		event.dataTransfer.effectAllowed = 'move';
 	});
 	
-	var switchTypeTile = Draw.switchElem(["type_svg", "type_color", "type_phisic"], "invis");
-	switchTypeTile("type_" + getNode("type").value);
+	var switchTypeTile = Draw.switchElem("invis", {
+		svg: "type_svg", 
+		color: "type_color", 
+		phisic: "type_phisic"});
+	switchTypeTile(getNode("type").value);
+
 	Hear("type", "change", function(e){
-		switchTypeTile("type_" + e.target.value);
+		switchTypeTile(e.target.value);
 	});
+
 	Hear("add", "submit", function(){
 		var tile = {
 			type: this.type.value
