@@ -1,9 +1,9 @@
 const Hear = require("./Events.js");
 const Chromath = require('chromath');
 
-function CrController(Logic, Draw){
+module.exports = function(Logic, Draw){
 	
-	Hear("switch_add", "click", Draw.switchElem("invis", "add"));
+	
 
 	Hear("Tiles", "mousedown", function(event){
 		if(event.target.getAttribute("tile") !== null) Logic.setTile(event.target.getAttribute("tile"));
@@ -11,50 +11,31 @@ function CrController(Logic, Draw){
 	Hear("Tiles", "dragstart", function(event){
 		event.dataTransfer.effectAllowed = 'move';
 	});
-	
-	var switchTypeTile = Draw.switchElem("invis", {
-		svg: "type_svg", 
-		color: "type_color", 
-		phisic: "type_phisic"});
-	switchTypeTile(getNode("type").value);
 
-	Hear("type", "change", function(e){
-		switchTypeTile(e.target.value);
-	});
+	Hear("add", "submit", function(){ 
 
-	Hear("add", "submit", function(){
 		var tile = {
 			type: this.type.value
 		};
+
+		if(tile.type == "color")
+			tile.color = new Chromath(this.color.value).toRGBAObject();
+
 		if(tile.type == "svg"){
-			if(this.img.files[0]){
-				var reader = new FileReader();
-				reader.onload = function(e){
-					var img = e.target.result;
-					tile.img = img;
-					Logic.add(tile);
-				};
-				
-				reader.readAsDataURL(this.img.files[0]);
-			}
+			if(this.img_tile.files[0])
+				tile.files = this.img_tile.files;
+			else return; 
 		}
+
 		if(tile.type == "phisic"){
 			tile.durability = this.durability.value;
-			if(this.imgs.files[0]){
-				var reader = new FileReader();
-				reader.onload = function(e){
-					var img = e.target.result;
-					tile.img = img;
-					Logic.add(tile);
-				};
-				
-				reader.readAsDataURL(this.imgs.files[0]);
-			}
+
+			if(this.img_obj.files[0])
+				tile.files = this.img_obj.files;
+			else return; 
 		}
-		if(tile.type == "color"){
-			tile.color = new Chromath(this.color.value).toRGBAObject();
-			Logic.add(tile);
-		}
+
+		Logic.add(tile);
 		
 	});
 	Hear("dell", "click", Logic.dell.bind(Logic));
@@ -62,28 +43,7 @@ function CrController(Logic, Draw){
 	Hear("save", "click", Logic.save.bind(Logic));
 	Hear("open", "change", Draw.openJSON(Logic.load.bind(Logic)));
 	
-	Hear("View", "dragstart", function(e){
-		e.preventDefault();
-		if(e.target.getAttribute("tile") !== null) Draw.View.current_tile = e.target;
-	});
-	Hear("View", "mouseup", function(e){
-		Draw.View.norm();
-		Draw.View.current_tile = null;
-	});
-	Hear("View", ["mouseover", "mouseout"], function(e){
-		if(e.target !== e.currnetTarget) return;
-		Draw.View.norm();
-		Draw.View.current_tile = null;
-	});
-	Hear("View", "mousemove", function(e){
-		if(Draw.View.current_tile) Draw.View.move(e.movementX, e.movementY);
-	});
-	Hear("View", "dragenter", function(e){
-		e.preventDefault();
-	});
-	Hear("View", "dragover", function(e){
-		e.preventDefault();
-	});
+	
 	Hear("View", "drop", function(e){
 		e.stopPropagation();
 		var box = e.currentTarget.getBoundingClientRect();
@@ -99,12 +59,5 @@ function CrController(Logic, Draw){
 	Hear("Height", "change", function(e){
 		Logic.resizeTile(null, parseInt(e.target.value));
 	});
-}
+};
 
-module.exports = CrController;
-
-function getNode(id){
-	var elem = document.getElementById(id);
-	if(!elem) throw new Error("Elem is not find!");
-	return elem;
-}

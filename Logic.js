@@ -1,6 +1,7 @@
 var Types = require("./Types.js");
 var T = Object.types;
 
+var Files = require("./SysFiles.js");
 
 
 function CrLogic(Draw){
@@ -20,7 +21,21 @@ function CrLogic(Draw){
 		current_tile = finded_tile;
 	}
 	
-	this.add = Add;
+	this.add = function(tile){
+		if(tile.files){
+			var files = tile.files;
+			delete tile.files;
+
+			if((tile.type == "svg" || tile.type == "phisic") && files[0]){
+				Files.open(files[0], function(img){
+					tile.img = img.content;
+					Add(tile);
+				});
+			}
+		}
+		else Add(tile);
+	};
+
 	this.dell = function(){
 		if(current_tile !== null){
 			Draw.View.dell(current_tile.id);

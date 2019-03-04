@@ -2,6 +2,8 @@ require("typesjs");
 const RGB = require('chromath').rgb;
 var FileSaver = require('file-saver');
 
+var Base64 = require('js-base64').Base64;
+
 var id_tiles_list = "Tiles";
 var id_view = "View";
 
@@ -168,7 +170,8 @@ function drawTile(new_tile){
 	}
 	if(new_tile.type == "svg" || new_tile.type == "phisic"){
 		var img = document.createElement('img');
-		img.src = new_tile.img;
+		img.src = "data:image/svg+xml;base64,"+ Base64.encode(new_tile.img);
+		console.log(img.src);
 	}
 
 	img.classList.add("tile");

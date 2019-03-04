@@ -9,11 +9,11 @@ var type_tile = T.obj({
 	});
 var type_tile_svg = T.obj({
 		type: "svg",
-		img: T.str(/^[\w\d+:;,=/]*$/, 1024*1024)
+		img: T.str(/^[\w\d\s+:;.,?=#\/<>"()-]*$/, 1024*1024)
 });
 var type_tile_phisic = T.obj({
 		type: "phisic",
-		img: T.str(/^[\w\d+:;,=/]*$/, 1024*1024),
+		img: T.str(/^[\w\d\s+:;.,?=#\/<>"()-]*$/, 1024*1024),
 		durability: "wood"
 });
 module.exports = {
