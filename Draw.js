@@ -1,8 +1,8 @@
 require("typesjs");
 const RGB = require('chromath').rgb;
-var FileSaver = require('file-saver');
 
 var Base64 = require('js-base64').Base64;
+const CrSwitches = require("./CrSwitches.js");
 
 var id_tiles_list = "Tiles";
 var id_view = "View";
@@ -13,7 +13,7 @@ function CrTiles(id){
 	
 	this.addGetSet("current_tile", 
 		function(){
-			return current_tile.tile;
+			return current_tile;
 		}, 
 		function(new_tile){
 			
@@ -60,6 +60,7 @@ function CrView(id){
 	
 	this.add = function(new_tile, x, y){
 		var tile = drawTile(new_tile);
+
 		tile.style.width = (new_tile.width * (100 / size)) + "%";
 		tile.style.height = (new_tile.height * (100 / size)) + "%";
 		
@@ -138,28 +139,14 @@ function CrView(id){
 	
 }
 
-module.exports = {
+var Draw = {
 	Tiles: new CrTiles(id_tiles_list),
 	View: new CrView(id_view),
-	save: Save,
-	openJSON: OpenFileJSON,
 	switchElem: require("./Switch.js")
-}
+};
 
-function OpenFileJSON(Open){
-	return function(){
-		if(this.files[0]){
-			var reader = new FileReader();
-			reader.onload = function(e){Open(JSON.parse(e.target.result))};
-			reader.readAsText(this.files[0]);
-		}
-	}
-}
-
-function Save(name, text){
-	var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-	FileSaver.saveAs(blob, name);
-}
+CrSwitches(Draw);
+module.exports = Draw;
 
 
 function drawTile(new_tile){

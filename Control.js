@@ -1,7 +1,7 @@
 const Hear = require("./Events.js");
 const Chromath = require('chromath');
 
-module.exports = function(Logic, Draw){
+module.exports = function(Logic){
 	
 	
 
@@ -41,7 +41,9 @@ module.exports = function(Logic, Draw){
 	Hear("dell", "click", Logic.dell.bind(Logic));
 	
 	Hear("save", "click", Logic.save.bind(Logic));
-	Hear("open", "change", Draw.openJSON(Logic.load.bind(Logic)));
+	Hear("open", "change", function(){
+		if(this.files[0]) Logic.load(this.files[0]);
+	});
 	
 	
 	Hear("View", "drop", function(e){
@@ -50,7 +52,7 @@ module.exports = function(Logic, Draw){
 		var x = e.clientX - box.left;
 		var y = e.clientY - box.top;
 		
-		if(Logic.getTile()) Draw.View.add(Logic.getTile(), x, y);
+		Logic.showTile(x, y);
 	});
 	
 	Hear("Width", "change", function(e){

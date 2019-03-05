@@ -61,16 +61,18 @@ function CrLogic(Draw){
 			return tile; 
 		});
 		data = {tiles: data, width: def_width, height: def_height}
-		Draw.save("tileset.json", JSON.stringify(data, null, 1));
+		Files.save("tileset.json", JSON.stringify(data, null, 1));
 	}
-	this.load = function(new_tiles, is_save=true){
+	this.load = function(file, is_save=false){
 		if(is_save) this.save();
-		Clear();
-		new_tiles.tiles.forEach(Add);
-		this.setTile(0);
-		
-		def_width = new_tiles.width;
-		def_height = new_tiles.height;
+
+		var self = this;
+		Files.open(file, function(file){
+			Load(JSON.parse(file.content));
+			self.setTile(0);
+		});
+
+
 	}
 	
 	this.getTile = function(){
@@ -79,6 +81,11 @@ function CrLogic(Draw){
 		if(tile.height === undefined) tile.height = def_height;
 		
 		return tile;
+	}
+
+	this.showTile = function(x, y){
+		if(current_tile) 
+			Draw.View.add(this.getTile(), x, y);
 	}
 	
 	this.resizeTile = function(w, h){
@@ -110,6 +117,15 @@ function CrLogic(Draw){
 		Draw.Tiles.add(tile);
 	}
 	
+	function Load(new_tiles){
+
+		Clear();
+		new_tiles.tiles.forEach(Add);
+		
+		def_width = new_tiles.width;
+		def_height = new_tiles.height;
+	}
+
 	function Clear(){
 		Draw.View.clear();
 		Draw.Tiles.clear();
