@@ -27,7 +27,8 @@ p{
 
 	margin-top: 0;
 	margin-bottom: 0;
-	
+
+	flex-shrink: 0;
 	width: 90vh;
 	height: 90vh;
 	

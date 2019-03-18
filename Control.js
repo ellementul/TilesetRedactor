@@ -5,11 +5,8 @@ module.exports = function(Logic){
 	
 	
 
-	Hear("Tiles", "mousedown", function(event){
+	Hear("Tiles", "click", function(event){
 		if(event.target.getAttribute("tile") !== null) Logic.setTile(event.target.getAttribute("tile"));
-	});
-	Hear("Tiles", "dragstart", function(event){
-		event.dataTransfer.effectAllowed = 'move';
 	});
 
 	Hear("add", "submit", function(){ 
@@ -46,7 +43,7 @@ module.exports = function(Logic){
 	});
 	
 	
-	Hear("View", "drop", function(e){
+	Hear("View", "click", function(e){
 		e.stopPropagation();
 		var box = e.currentTarget.getBoundingClientRect();
 		var x = e.clientX - box.left;
