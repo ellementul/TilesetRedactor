@@ -82,10 +82,7 @@ function CrView(id){
 	
 	this.resize = function(tile){
 		var elems = container.querySelectorAll('[tile="' + tile.id + '"]');
-		elems.forEach(function(elem){
-			elem.style.width = (tile.width * (100 / size)) + "%";
-			elem.style.height = (tile.height * (100 / size)) + "%";
-		});
+		elems.forEach(tile => tile.remove());
 	}
 	
 	this.move = function(x, y){

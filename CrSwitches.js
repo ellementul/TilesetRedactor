@@ -14,28 +14,8 @@ module.exports = function(Draw){
 		switchTypeTile(e.target.value);
 	});
 
-	Hear("View", "dragstart", function(e){
-		e.preventDefault();
-		if(e.target.getAttribute("tile") !== null) Draw.View.current_tile = e.target;
-	});
-	Hear("View", "mouseup", function(e){
-		Draw.View.norm();
-		Draw.View.current_tile = null;
-	});
-	Hear("View", ["mouseover", "mouseout"], function(e){
-		if(e.target !== e.currnetTarget) return;
-		Draw.View.norm();
-		Draw.View.current_tile = null;
-	});
-	Hear("View", "mousemove", function(e){
-		if(Draw.View.current_tile) Draw.View.move(e.movementX, e.movementY);
-	});
-	Hear("View", "dragenter", function(e){
-		e.preventDefault();
-	});
-	Hear("View", "dragover", function(e){
-		e.preventDefault();
-	});
+	Hear("clear", "click", Draw.View.clear);
+
 };
 
 function getNode(id){
