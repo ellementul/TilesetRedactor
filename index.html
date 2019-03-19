@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -21,13 +22,8 @@
 			</div>
 			
 			<form id="add" class="invis">
-				<h3>Тип</h3>
-				<select id="type" name="type">
-					<option selected value="svg">SVG</option>
-					<option value="color">Цвет</option>
-					<option value="phisic">Объект</option>
-				</select>
-
+				<h3 id="select_types"></h3>
+				
 				<div id="type_color" class="invis">
 					<h3>Цвет</h3>
 					<input name="color" type="color">
@@ -37,19 +33,16 @@
 					<input name="img_tile" type="file" accept="image">
 				</div>
 				<div id="type_phisic"  class="invis">
-					<h3>Прочность</h3>
-					<select name="durability">
-						<option selected value="wood">Дерево</option>
-					</select>
+					<h3 id="select_durability">Прочность</h3>
 					<h3>Картинка</h3>
 					<input name="img_obj" type="file" accept="image">
 				</div>
 				
 
-				<button class="submit">OK</button>
+				<button id="OK" class="submit invis">OK</button>
 			</form>
 			
-			<div class="panel-column">
+			<div id="tile_size" class="panel-column">
 				<p>ШИРИНА ТАЙЛА<input id="Width" type="number" min="1" max="20"/>
 				<p>ВЫСОТА ТАЙЛА<input id="Height" type="number" min="1" max="20"/>
 			</div>

@@ -4,12 +4,24 @@ const RGB = require('chromath').rgb;
 var Base64 = require('js-base64').Base64;
 const CrSwitches = require("./CrSwitches.js");
 
+
 var id_tiles_list = "Tiles";
 var id_view = "View";
+var id_types = "select_types";
+var id_dur = "select_durability";
+
+var type_tile = {
+	"Фоновый тайл": "svg", 
+	"Цветной тайл": "color", 
+	"Игровой объект": "phisic"
+};
+var types_durability = require("./types_durability.json");
+
 
 function CrTiles(id){
 	var container = getNode(id);
-	var current_tile = null;
+	var current_tile = null; 
+
 	
 	this.addGetSet("current_tile", 
 		function(){
@@ -136,6 +148,9 @@ function CrView(id){
 	
 }
 
+drawSelect(getNode(id_types), type_tile, "type");
+drawSelect(getNode(id_dur), types_durability, "durability");
+
 var Draw = {
 	Tiles: new CrTiles(id_tiles_list),
 	View: new CrView(id_view),
@@ -145,6 +160,20 @@ var Draw = {
 CrSwitches(Draw);
 module.exports = Draw;
 
+function drawSelect(container, list, name){
+	var select = document.createElement("select");
+		select.setAttribute("name", name);
+		select.setAttribute("id", name);
+
+	for (var val in list){
+		var opt = document.createElement("option");
+		opt.value = list[val];
+		opt.innerHTML = val;
+		select.appendChild(opt);
+	}
+
+	container.insertAdjacentElement("afterEnd", select);
+}
 
 function drawTile(new_tile){
 	

@@ -2,16 +2,16 @@ const Hear = require("./Events.js");
 
 module.exports = function(Draw){
 
-	Hear("switch_add", "click", Draw.switchElem("invis", "add"));
+	Hear("switch_add", "click", Draw.switchElem("invis", ["add", "tile_size"]));
 
 	var switchTypeTile = Draw.switchElem("invis", {
 		svg: "type_svg", 
 		color: "type_color", 
 		phisic: "type_phisic"});
-	switchTypeTile(getNode("type").value);
 
 	Hear("type", "change", function(e){
 		switchTypeTile(e.target.value);
+		getNode("OK").classList.remove("invis");
 	});
 
 	Hear("clear", "click", Draw.View.clear);

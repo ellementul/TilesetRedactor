@@ -1,6 +1,8 @@
 require("typesjs");
 require("typesjs/str_type");
 
+var types_durability = require("./types_durability.json");
+
 var T = Object.types;
 
 var type_tile = T.obj({
@@ -14,7 +16,7 @@ var type_tile_svg = T.obj({
 var type_tile_phisic = T.obj({
 		type: "phisic",
 		img: T.str(/^[\w\d\s+:;.,?=#\/<>"()-]*$/, 1024*1024),
-		durability: "wood"
+		durability: T.any(Object.values(types_durability))
 });
 module.exports = {
 	tile: T.any(type_tile_svg, type_tile, type_tile_phisic)
