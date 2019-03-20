@@ -184,7 +184,6 @@ function drawTile(new_tile){
 	if(new_tile.type == "svg" || new_tile.type == "phisic"){
 		var img = document.createElement('img');
 		img.src = "data:image/svg+xml;base64,"+ Base64.encode(new_tile.img);
-		console.log(img.src);
 	}
 
 	img.classList.add("tile");

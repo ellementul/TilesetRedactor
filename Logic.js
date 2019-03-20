@@ -26,6 +26,9 @@ function CrLogic(Draw){
 			var files = tile.files;
 			delete tile.files;
 
+			if(files[0].type !== "image/svg+xml")
+				return false;
+
 			if((tile.type == "svg" || tile.type == "phisic") && files[0]){
 				Files.open(files[0], function(img){
 					tile.img = img.content;
@@ -34,6 +37,7 @@ function CrLogic(Draw){
 			}
 		}
 		else Add(tile);
+		return true;
 	};
 
 	this.dell = function(){
@@ -63,8 +67,7 @@ function CrLogic(Draw){
 		data = {tiles: data, width: def_width, height: def_height}
 		Files.save("tileset.json", JSON.stringify(data, null, 1));
 	}
-	this.load = function(file, is_save=false){
-		if(is_save) this.save();
+	this.load = function(file){
 
 		var self = this;
 		Files.open(file, function(file){
