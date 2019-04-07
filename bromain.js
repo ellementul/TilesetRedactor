@@ -1,9 +1,17 @@
-const Draw = require("./Draw.js");
-const CrLogic = require("./Logic.js");
-const CrController = require("./Control.js");
 
-var Logic = new CrLogic(Draw);
-CrController(Logic);
+
+const CrInter = require("./inter.js");
+var Types = require("./Types.js");
+
+const Display = require("./Display.js");
+const CrLogic = require("./Logic.js");
+
+const DisplayInter = new CrInter();
+DisplayInter.test(Types, console.log);
+
+Display(DisplayInter);
+
+CrLogic(DisplayInter);
 
 
 

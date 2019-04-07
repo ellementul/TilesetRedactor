@@ -1,3 +1,7 @@
+body{
+	background-color: #ccc;
+}
+
 .map{
 	position: relative;
 
@@ -8,6 +12,22 @@
 	width: 90vh;
 	height: 90vh;
 	
+	background: #e6e6e6;
+}
+
+.grid-border{
+	border: solid 0.1vh #ccc;
+}
+
+.box{
+	box-sizing: border-box;
+	position: absolute;
+	z-index: 100000;
+	
+	left: 0;
+	top: 0;
+	
+	margin: 0;
 	background: white;
 }
 
@@ -18,8 +38,14 @@
 .switch-tab{
 	width: 9vh;
 	height: 9vh;
+
+	margin-right: 0.1vh;
+
+	border: solid 0.1vh #ccc;
 	
 	background-color: white;
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 
 .tool{
@@ -32,8 +58,141 @@
 .tab{
 	width: 70vh;
 
+	padding: 3vh;
+
 	background-color: white;
 }
 
+.tiles-list{
+	background: #e6e6e6;
+}
 
+.tiles-list > .tile{
+	margin-top: 1.5vh;
+	margin-left: 1.5vh;
+}
+
+.add-form{
+	margin: 2vh;
+}
+
+.actives-tiles{
+
+	width: 9vh;
+	height: 9vh;
+
+	border: none;
+
+	background-size: contain;
+	background-color: white;
+}
+
+.type-list{
+	width: 17vh;
+
+	border: solid 0.1vh #ad8e0f;
+
+	font-size: 4.7vh;
+	color: #008000;
+
+	background-color: white;
+}
+
+.type-list p{
+	height: 5vh;
+
+	margin: 0;
+}
+
+.option-change{
+	border: solid 0.3vh #ad8e0f;
+	background-color: #44aa00b3;
+}
+
+.icon{
+	width: 5vh;
+	height: 5vh;
+
+	margin: 0.5vh;
+
+	background-size: contain;
+}
+
+.size{
+	margin: 1vh;
+}
+
+input{
+	display: inline-block;
+	height: 5vh;
+	width: 25vh;
+	border: solid 0.1vh #ad8e0f;
+
+	font-size: 4.7vh;
+	color: #008000;
+}
+
+.input-size{
+	width: 10vh;
+}
+
+.tile{
+	width: 9vh;
+	height: 9vh;
+
+	border: none;
+
+	background-size: contain;
+}
+
+.add-submit{
+	margin-top: 5vh;
+
+	border: solid 0.1vh #008000;
+
+	font-size: 4.7vh;
+	color: #008000;
+
+	background-color: white;
+}
+
+.press{
+	box-sizing: border-box;
+	border: solid 0.5vh #44aa00;
+}
+
+.add-img{
+	margin-bottom: 1.5vh;
+
+	background-image: url("img/add_img.svg");
+}
+
+.add-button{
+	background-image: url("img/add.svg");
+}
+
+.del-button{
+	background-image: url("img/del.svg");
+}
+
+.open-button{
+	background-image: url("img/open.svg");
+}
+
+.save-button{
+	background-image: url("img/save.svg");
+}
+
+
+.size-icon{
+	background-image: url("img/size_icon.svg");
+}
+
+.div-icon{
+	background-image: url("img/div_icon.svg");
+}
+
+.tag-icon{
+	background-image: url("img/tag_icon.svg");
+}
 

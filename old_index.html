@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="index.css">
+	</head>
+	<body class="window panel-stroke">
+		<div id="View" class="window view">
+		</div>
+		<div class="panel-column">
+			<div class="panel-stroke">
+				<button id="save" class="button">СОХРАНИТЬ</button>
+				<button id="clear" class="button">ОЧИСТИТЬ</button>
+				<p class="button">
+					ОТКРЫТЬ: 
+					<input id="open" type="file">
+				</p>
+			</div>
+			<div class="panel-stroke">
+				<button id="switch_add" class="button">ДОБАВИТЬ</button>
+				<button id="dell" class="button">УДАЛИТЬ</button>
+			</div>
+			
+			<form id="add" class="invis">
+				<h3 id="select_types"></h3>
+				
+				<div id="type_color" class="invis">
+					<h3>Цвет</h3>
+					<input name="color" type="color">
+				</div>
+				<div id="type_svg"  class="invis">
+					<h3>Картинка</h3>
+					<input name="img_tile" type="file" accept="image">
+				</div>
+				<div id="type_phisic"  class="invis">
+					<h3 id="select_durability">Прочность</h3>
+					<h3>Картинка</h3>
+					<input name="img_obj" type="file" accept="image">
+				</div>
+				
+
+				<button id="OK" class="submit invis">OK</button>
+			</form>
+			
+			<div id="tile_size" class="panel-column">
+				<p>ШИРИНА ТАЙЛА<input id="Width" type="number" min="1" max="20"/>
+				<p>ВЫСОТА ТАЙЛА<input id="Height" type="number" min="1" max="20"/>
+			</div>
+			
+			<div id="Tiles" class="panel-wrap"></div>
+		</div>
+	<script src="bundle.js"></script>
+	</body>
+</html>

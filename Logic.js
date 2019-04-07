@@ -1,141 +1,72 @@
-var Types = require("./Types.js");
-var T = Object.types;
+require("./mof.js");
 
-var Files = require("./SysFiles.js");
+var map_size = {width: 20, height: 20, layers: 2};
 
+function CrTiles(){
+	var tiles = Array.create();
 
-function CrLogic(Draw){
-	var tiles = [];
-	var current_tile = null;
-	var tiles_count = 0;
-	
-	var def_width = 1;
-	var def_height = 1;
-	
-	this.setTile = function(val){
-		var finded_tile = getTile(val);
-		
-		if(!finded_tile) throw new Error("Tile is not find!");
-		
-		Draw.Tiles.current_tile = finded_tile;
-		current_tile = finded_tile;
-	}
-	
-	this.add = function(tile){
-		if(tile.files){
-			var files = tile.files;
-			delete tile.files;
-
-			if(files[0].type !== "image/svg+xml")
-				return false;
-
-			if((tile.type == "svg" || tile.type == "phisic") && files[0]){
-				Files.open(files[0], function(img){
-					tile.img = img.content;
-					Add(tile);
-				});
-			}
-		}
-		else Add(tile);
-		return true;
-	};
-
-	this.dell = function(){
-		if(current_tile !== null){
-			Draw.View.dell(current_tile.id);
-			
-			var index = tiles.indexOf(current_tile);
-			tiles.splice(index, 1);
-			Draw.Tiles.dell();
-			
-			if(tiles[0]){
-				current_tile = tiles[0];
-				Draw.Tiles.current_tile = tiles[0];
-			}
-			else{
-				current_tile = null;
-			}
-		}
-	}
-	
-	this.save = function(){
-		var data = tiles.map(function(tile, i){
-			tile = Object.assign({}, tile);
-			tile.id = i; 
-			return tile; 
-		});
-		data = {tiles: data, width: def_width, height: def_height}
-		Files.save("tileset.json", JSON.stringify(data, null, 1));
-	}
-	this.load = function(file){
-
-		var self = this;
-		Files.open(file, function(file){
-			Load(JSON.parse(file.content));
-			self.setTile(0);
-		});
-
-
-	}
-	
-	this.getTile = function(){
-		var tile = Object.assign({}, current_tile);
-		if(tile.width === undefined) tile.width = def_width;
-		if(tile.height === undefined) tile.height = def_height;
-		
-		return tile;
-	}
-
-	this.showTile = function(x, y){
-		if(current_tile) 
-			Draw.View.add(this.getTile(), x, y);
-	}
-	
-	this.resizeTile = function(w, h){
-		if(current_tile){
-			if(!current_tile.width) current_tile.width = def_width;
-			if(!current_tile.height) current_tile.height = def_height;
-			
-			if(!T.pos.test(w)) current_tile.width = w;
-			if(!T.pos.test(h)) current_tile.height = h;
-			
-			Draw.View.resize(current_tile);
-			
-			if(current_tile.width === def_width) current_tile.width = undefined;
-			if(current_tile.height === def_height) current_tile.height = undefined;
-		}
-	}
-	
-	function getTile(id){
-		return tiles.filter(tile => id == tile.id)[0];
-	}
-	
-	function Add(tile){
-		if(Types.tile.test(tile)) throw Types.tile.test(tile);
-		tile.id = tiles_count++;
-		
-		if(current_tile === null)tiles.push(tile);
-		else tiles.splice(getTile(current_tile), 0, tile);
-		
-		Draw.Tiles.add(tile);
-	}
-	
-	function Load(new_tiles){
-
-		Clear();
-		new_tiles.tiles.forEach(Add);
-		
-		def_width = new_tiles.width;
-		def_height = new_tiles.height;
-	}
-
-	function Clear(){
-		Draw.View.clear();
-		Draw.Tiles.clear();
-		tiles = [];
-		current_tile = null;
-		tiles_count = 0;
+	this.add = function(new_tile){
+		new_tile.id = tiles.add(new_tile);
+		return new_tile;
 	}
 }
 
-module.exports = CrLogic;
+var Tiles = new CrTiles();
+
+function CrMap(sizes){
+	var cr_line = Array.create.bind(null, null, sizes.width);
+	var cr_pline = Array.create.bind(null, cr_line, sizes.width, true);
+	var map = Array.create(cr_pline, sizes.layers);
+
+	this.load = function(){
+		return {
+			action: "Create",
+			type: "Map",
+			sizes: sizes
+		}
+	}
+
+	this.draw = function(id_tile, coords, tool){
+		if(coords
+		&& map[coords.z]
+		&& map[coords.z][coords.y]
+		&& !map[coords.z][coords.y][coords.x]){
+
+			map[coords.z][coords.y][coords.x] = id_tile;
+			return coords;
+		}
+	}
+}
+
+var TileMap = new CrMap(map_size);
+
+module.exports = function CrLogic(Inter){
+	var send = Inter.connect(receive);
+	send(TileMap.load());
+
+	function receive(mess){
+		switch(mess.type){
+			case "Tile": receiveTiles(mess); break;
+			case "Map": receiveMap(mess); break;
+		}
+	}
+
+	function receiveTiles(mess){
+		switch(mess.action){
+			case "Add":  {
+				mess.tile = Tiles.add(mess.tile);
+				send(mess);
+				
+			} break;
+		}
+	}
+
+	function receiveMap(mess){
+		switch(mess.action){
+			 case "Draw":  {
+			 	mess.coords = TileMap.draw(mess.id_tile, mess.coords, mess.tool);
+			 	send(mess);
+			 }
+		}
+	}
+}
