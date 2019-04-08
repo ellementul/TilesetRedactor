@@ -16,6 +16,18 @@
 	flex-wrap: wrap;
 }
 
+.layer{
+	box-sizing: border-box;
+	position: absolute;
+}
+
+.box{
+	box-sizing: border-box;
+	position: absolute;
+	
+	margin: 0;
+}
+
 .space-between{
 	justify-content: space-between;
 }

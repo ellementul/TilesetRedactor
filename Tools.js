@@ -25,6 +25,11 @@ module.exports = function CrTools(){
 		},
 		function(val){
 			type = val;
+			
+			if(pallet[type]) 
+				changeTileView(pallet[type].images[0]);
+			else
+				changeTileView(null);
 		}
 	);
 

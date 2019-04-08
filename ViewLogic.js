@@ -15,9 +15,26 @@ module.exports = function(Form, Tool){
 	Hear("Tiles", "click", function(e){
 		if(e.target.tile){
 			Tool.tile = e.target.tile;
-			e.target.classList.add("press");
-			setTimeout(()=>e.target.classList.remove("press"), 300)
+			Press(e);
 		}
 	});
 
+	Hear("Tools", "click", function(e){
+		if(e.target.getAttribute("tool")){
+			Tool.type = e.target.getAttribute("tool");
+			Press(e);
+		}
+	});
+
+	Hear("Map", "dragstart", function(e){
+		e.preventDefault();
+	});
+
+	
+
 };
+
+function Press(e){
+		e.target.classList.add("press");
+		setTimeout(()=>e.target.classList.remove("press"), 300);
+}

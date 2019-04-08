@@ -6,6 +6,7 @@ const Hear = require("./Events.js");
 
 const CrAddForm = require("./AddForm.js");
 const CrTool = require("./Tools.js");
+const CrTiles = require("./Tiles.js");
 const CrMap = require("./Map.js");
 
 
@@ -70,6 +71,13 @@ module.exports = function CrDisplay(Inter){
 				coords: {x: x, y: y, z: 1},
 				tile_id: Tool.tile
 			});
+		else if(Tool.type == "Clear")
+			Send({
+				action: "Draw",
+				type: "Map",
+				tool: Tool.type,
+				coords: {x: x, y: y, z: 1}
+			});
 	}
 
 
@@ -83,30 +91,22 @@ module.exports = function CrDisplay(Inter){
 
 	function receiveTiles(mess){
 		switch(mess.action){
-			 case "Add":  Tiles.add(mess.tile); break;
+			case "Add":  Tiles.add(mess.tile); break;
 		}
 	}
 
 	function receiveMap(mess){
 		switch(mess.action){
-			 case "Create":  {
-			 	TileMap.load(mess); initMap(); break;
-			 }
+			case "Create":  
+				TileMap.load(mess.sizes); initMap(); 
+				break;
+			case "Draw":
+				TileMap.draw(mess);
+				break;
 		}
 	}
 }
 //Tiles--------------------------------------------------------
-const Lib = require("./drawLib.js");
 
-var tiles_cont = Lib.getNode("Tiles");
-
-function CrTiles(container){
-
-	this.add = function(new_tile){
-		var tile = Lib.drawTile(new_tile.images[0]);
-		tile.tile = new_tile;
-		tiles_cont.appendChild(tile);
-	}
-}
 
 //

@@ -41,20 +41,38 @@ var draw_mess_type = {
 	tile_id: tile_id_type
 };
 
-var draw_mess_type_with_empty_coords = {
+var clear_mess_type = {
+	action: "Draw",
+	type: "Map",
+	tool: "Clear",
+	coords: coords_type
+};
+
+var clear_mess_type_for_display = {
+	action: "Draw",
+	type: "Map",
+	tool: "Clear",
+	coords: T.arr(coords_type, 20, false)
+};
+
+var draw_mess_type_for_display = {
 	action: "Draw",
 	type: "Map",
 	tool: "Pen",
-	coords: T.any(undefined, coords_type),
+	coords: T.arr(coords_type, 20, false),
 	tile_id: tile_id_type
 };
 
-var mess_types_one = T.any(draw_mess_type, new_tile_mess_type);
+var mess_types_one = T.any([
+	draw_mess_type, 
+	new_tile_mess_type, 
+	clear_mess_type]);
 
 var mess_types_two = T.any([
-	draw_mess_type_with_empty_coords,
+	draw_mess_type_for_display,
 	new_tile_mess_type, 
-	new_map_mess_type]);
+	new_map_mess_type,
+	clear_mess_type_for_display]);
 
 module.exports = [
 	function(val){
